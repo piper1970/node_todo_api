@@ -25,6 +25,17 @@ app.post('/todos', (req, res) => {
   });
 });
 
+// get all todo's
+app.get('/todos', (req, res) => {
+  Todo.find().then( (todos) => {
+    res.send({
+      todos
+    });
+  }, (error) => {
+    response.status(400).send(error);
+  });
+});
+
 
 
 app.listen(port, () => {
