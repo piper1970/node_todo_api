@@ -2,8 +2,10 @@
 
 const mongoose = require('mongoose');
 
+const connection = process.env.STEVE || 'mongodb://localhost:27017/TodApp';
+
 mongoose.Promise = global.Promise;
-mongoose.connect('mongodb://localhost:27017/TodApp');
+mongoose.connect(connection);
 
 
 module.exports = {
