@@ -11,5 +11,3 @@ mongoose.connect(connection);
 module.exports = {
   mongoose
 };
-
-'production', 'development', 'test'
