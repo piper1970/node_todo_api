@@ -5,6 +5,8 @@ const validator = require('validator');
 const jwt = require('jsonwebtoken');
 const _ = require('lodash');
 
+const hashSecret = 'Purple Rain';
+
 let UserSchema = new mongoose.Schema({
   email:{
     type: String,
@@ -37,7 +39,7 @@ let UserSchema = new mongoose.Schema({
 UserSchema.methods.generateAuthToken = function () {
   let user = this;
   let access = 'auth';
-  let token = jwt.sign({ _id: user._id.toHexString(),access}, 'abc123').toString();
+  let token = jwt.sign({ _id: user._id.toHexString(),access}, hashSecret).toString();
 
   user.tokens.push({access, token});
 
@@ -49,6 +51,22 @@ UserSchema.methods.toJSON = function () {
   let userObject = user.toObject();
 
   return _.pick(userObject, ['_id', 'email']);
+};
+
+UserSchema.statics.findByToken = function(token) {
+  let User = this;
+  let decoded;
+
+  try{
+    decoded = jwt.verify(token, hashSecret);
+  }catch(error){
+    return Promise.reject('authorization failed');
+  }
+  return User.findOne({
+    '_id': decoded._id,
+    'tokens.token':token,
+    'tokens.access': 'auth'
+  });
 };
 
 const User = mongoose.model ('User', UserSchema);
