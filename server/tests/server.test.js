@@ -3,28 +3,13 @@
 const request = require('supertest');
 const expect = require('expect');
 const {ObjectID} = require('mongoDB');
+const {todos, populateTodos, users, populateUsers} = require('./seed/seed');
 
 const {app} = require('./../server');
 const {Todo} = require('./../models/todo');
 
-const todos = [
-  {
-    text: 'First test todo',
-    _id: new ObjectID()
-  },
-  {
-    text: 'Second test todo',
-    _id: new ObjectID(),
-    completed:true,
-    completedAt:123
-  }
-];
-
-beforeEach( (done) => {
-  Todo.remove({}).then( () =>  {
-    return Todo.insertMany(todos).then(() => done());
-  });
-});
+beforeEach(populateUsers);
+beforeEach(populateTodos);
 
 describe('POST /todos', () => {
 
