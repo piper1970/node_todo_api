@@ -6,7 +6,7 @@ const jwt = require('jsonwebtoken');
 const _ = require('lodash');
 const bcrypt = require('bcryptjs');
 
-const hashSecret = 'Purple Rain';
+const hashSecret = '123abc!';
 const saltLength = 10;
 
 let UserSchema = new mongoose.Schema({
