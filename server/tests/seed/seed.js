@@ -6,14 +6,16 @@ const jwt = require('jsonwebtoken');
 
 const userOneID = new ObjectID();
 const userTwoID = new ObjectID();
+const hashSecret = '123abc!';
+let access = 'auth';
 
 const users = [{
   _id: userOneID,
   email: 'whatever@whatever.com',
   password: 'userOnePass',
   tokens:[{
-    access:'auth',
-    token: jwt.sign({_id:userOneID, access: 'auth'}, '123abc!').toString()
+    access,
+    token: jwt.sign({_id:userOneID, access},hashSecret, {noTimestamp: true }).toString()
   }]
 }, {
   _id: userTwoID,
@@ -42,6 +44,7 @@ const populateTodos = (done) => {
 
 const populateUsers = (done) => {
   User.remove({}).then(() => {
+
     let userOne = new User(users[0]).save();
     let userTwo = new User(users[1]).save();
 
