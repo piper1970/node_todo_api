@@ -1,2 +1,5 @@
 #Ignore NPM stuff
 node_modules/
+
+#Ignore config file
+server/config/config.json
