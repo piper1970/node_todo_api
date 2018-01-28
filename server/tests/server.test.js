@@ -240,7 +240,7 @@ describe('POST /users', () => {
       .end(done);
   });
 });
-  describe('POST /users/login', () => {
+describe('POST /users/login', () => {
     it('should login user and return auth token', (done) => {
       request(app)
         .post('/users/login')
@@ -277,4 +277,27 @@ describe('POST /users', () => {
           done();
         }).catch((err) => done(err));
     });
+});
+
+describe('DELETE /users/me/token', () => {
+  it('should remove auth token on logout', (done) => {
+    // DELETE /users/me/tokens
+    request(app)
+      .delete('/users/me/token')
+      .set('x-auth', users[0].tokens[0].token)
+      .expect(200)
+      .end((error, res) => {
+        if(error){
+          return done(error);
+        }
+
+        User.findById(users[0]._id)
+          .then((user) => {
+            expect(user.tokens.length).toBe(0);
+            done();
+          }).catch((error) => {
+            done(error);
+          });
+      })
+  });
 });
